@@ -27,13 +27,6 @@ d3.json("samples.json").then((data) => {
     
     displaySamples(data.names);
 
-    // let sample_values = data.samples;
-    // let sample_sliced = sample_data.slice(0,10);
-    // console.log(sample_sliced);
-
-    // let sample_values = sample_sliced;
-    // console.log(sample_values);
-
     let sampleData = data.samples[0].sample_values.slice(0,10)
     let sample_values = sampleData.sort((firstNum, secondNum) => firstNum - secondNum).reverse();
     console.log(sample_values);
