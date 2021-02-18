@@ -4,14 +4,9 @@
 //     });
 // }
 
-d3.selectAll("body").on("change", handleChange);
+// d3.selectAll("body").on("change", handleChange);
 
 
-function handleChange() {
-    d3.event.preventDefault();
-    value = d3.select("#selDataset").node();
-    displaySamples(data);
-}
 
 
 d3.json("samples.json").then((data) => {
@@ -33,8 +28,10 @@ d3.json("samples.json").then((data) => {
     console.log(sample_values);
 
     let otuData = data.samples[0].otu_ids.slice(0,10);
-    let otu_ids = otuData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
+    let otuSort = otuData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
+    let otu_ids = otuSort.map(data => "OTU" + " " + data);
     console.log(otu_ids);
+
     
     let otu_labels = data.samples[0].otu_labels.slice(0,10);
     console.log(otu_labels);
@@ -42,7 +39,7 @@ d3.json("samples.json").then((data) => {
     // horizontal bar chart
     let barhChart = [{
         x: sample_values,
-        y: `OTU + ${otu_ids}`,
+        y: otu_ids,
         text: otu_labels,
         type: "bar",
         orientation: "h"
@@ -55,7 +52,8 @@ d3.json("samples.json").then((data) => {
             r: 100,
             t: 100,
             b: 100
-        }
+        },
+        xaxis: {title: "Sample Values"}
     };
 
     Plotly.newPlot("bar", barhChart, layout);
@@ -63,12 +61,12 @@ d3.json("samples.json").then((data) => {
     // bubble chart
     let bubbleChart = [{
         x: sample_values,
-        y: otu_ids,
+        y: otuSort,
         text: otu_labels,
         mode: "markers",
         marker: {
             size: sample_values,
-            color: otu_ids
+            color: otuSort
         }
     }];
 
@@ -79,6 +77,23 @@ d3.json("samples.json").then((data) => {
     Plotly.newPlot("bubble", bubbleChart, bubbleLayout);
 
 });
+
+// let demoSelect = d3.select("#sample-metadata");
+
+d3.json("samples.json").then((data) => {
+    console.log(data);
+
+    function getMetadata() {
+        data.forEach((demographics) => {
+            let metadata = d3.select("#sample-metadata");
+            let cell = metadata.append("h3");
+            cell.text(demographics);
+        });
+    }
+
+    getMetadata(data.metadata);
+});
+// getMetadata(demographics)
 
 
 
