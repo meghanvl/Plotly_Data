@@ -4,10 +4,6 @@
 //     });
 // }
 
-// d3.selectAll("body").on("change", handleChange);
-
-
-
 
 d3.json("samples.json").then((data) => {
     console.log(data);
@@ -46,7 +42,7 @@ d3.json("samples.json").then((data) => {
     }];
 
     let layout = {
-        title: "Top 10 OTUs",
+        title: "Top 10 OTUs per Test Subject",
         margin: {
             l: 100,
             r: 100,
@@ -60,8 +56,8 @@ d3.json("samples.json").then((data) => {
 
     // bubble chart
     let bubbleChart = [{
-        x: sample_values,
-        y: otuSort,
+        x: otuSort,
+        y: sample_values,
         text: otu_labels,
         mode: "markers",
         marker: {
@@ -71,7 +67,8 @@ d3.json("samples.json").then((data) => {
     }];
 
     let bubbleLayout = {
-        title: "Samples"
+        xaxis: {title: "OTU ID"},
+        yaxis: {title: "Sample Values"}
     };
 
     Plotly.newPlot("bubble", bubbleChart, bubbleLayout);
@@ -83,17 +80,32 @@ d3.json("samples.json").then((data) => {
 d3.json("samples.json").then((data) => {
     console.log(data);
 
-    function getMetadata() {
-        data.forEach((demographics) => {
-            let metadata = d3.select("#sample-metadata");
-            let cell = metadata.append("h3");
-            cell.text(demographics);
+    let metadata = data.metadata;
+    console.log(metadata);
+
+    // let id = metadata.ethnicity;
+    let demoInfo = d3.select("#sample-metadata");
+
+    function displayMetadata(data) {
+        data.forEach((sample) => {
+            let cell = demoInfo.append("panel");
+            cell.text(sample);
         });
     }
-
-    getMetadata(data.metadata);
 });
-// getMetadata(demographics)
+
+
+d3.selectAll("#selDataset").on("change", handleChange);
+
+function handleChange(event) {
+    let dropdownMenu = d3.select("#selDataset");
+    let dataset = dropdownMenu.property("value");
+
+    displaySamples();
+    getMetadata();
+}
+
+    
 
 
 
