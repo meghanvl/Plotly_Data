@@ -36,8 +36,8 @@ d3.json("samples.json").then((data) => {
     
     displaySamples(data.names);
 
-    let washes = data.metadata[0].wfreq;
-    console.log(washes);
+    // let washes = data.metadata[0].wfreq;
+    // console.log(washes);
 
     let sampleData = data.samples[0].sample_values.slice(0,10)
     let sample_values = sampleData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
