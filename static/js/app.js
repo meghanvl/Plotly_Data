@@ -17,8 +17,6 @@ d3.json("samples.json").then((data) => {
     }
     displayMetadata(data.metadata);
 
-//     let washes = data.wfreq;
-//     console.log(washes);
 });
 
 
@@ -132,19 +130,23 @@ function updateData(data) {
 // d3.json("samples.json").then((data) => {
 //     console.log(data)
 
-//     function init() {
-//         dropdown = d3.select("#selDataset");
+function init() {
+    d3.json("samples.json").then((data) => {
+        console.log(data)
 
-//         data.names.forEach((name) => {
-//             dropdown.append("option").text(name).property("value");
-//         });
+    dropdown = d3.select("#selDataset");
+
+    data.names.forEach((name) => {
+        dropdown.append("option").text(name).property("value");
+    });
         
-//         displayMetadata(data.names[0]);
-//         displaySamples(data.names[0]);
-       
-//     }
+    displayMetadata(data.metadata);
+    displaySamples(data.names);
 
-//     init();
+    });
+}
+
+init();
 
 // });
 
