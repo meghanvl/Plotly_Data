@@ -1,4 +1,5 @@
 // get metadata for demographic info box
+function buildMetadata(sample) {
 d3.json("samples.json").then((data) => {
     console.log(data);
 
@@ -18,6 +19,9 @@ d3.json("samples.json").then((data) => {
     displayMetadata(data.metadata);
 
 });
+}
+
+
 
 
 // get sample data (values, ids, labels for horizontal bar chart and bubble chart)
@@ -33,9 +37,16 @@ d3.json("samples.json").then((data) => {
     }
     
     displaySamples(data.names);
+});
 
     // let washes = data.metadata[0].wfreq;
     // console.log(washes);
+
+
+function buildPlots(sample) {
+d3.json("samples.json").then((data) => {
+    console.log(data);
+
 
     let sampleData = data.samples[0].sample_values.slice(0,10)
     let sample_values = sampleData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
@@ -90,6 +101,8 @@ d3.json("samples.json").then((data) => {
     };
 
     Plotly.newPlot("bubble", bubbleChart, bubbleLayout);
+    });
+}
 
     // // gauge plot
     // let gaugePlot = [{
@@ -119,41 +132,37 @@ d3.json("samples.json").then((data) => {
 
     // Plotly.newPlot("gauge", gaugePlot, gaugeLayout);
 
-});
+// });
 
-function updateData(data) {
-    displayMetadata(data);
-    displaySamples(data);
+
+function init() {
+
+d3.json("samples.json").then((data) => {
+    console.log(data);
+    
+    function sample(data) {
+        data.forEach((sample) => {
+            let dropdown = d3.select("#selDataset");
+            let cell = dropdown.append("option");
+            cell.text(sample);
+        });
+    }
+
+    let sampleDisplay = data[0];
+    buildPlots(sampleDisplay);
+    buildMetadata(sampleDisplay);
+
+});
+        
 }
 
 
-// d3.json("samples.json").then((data) => {
-//     console.log(data)
-
-function init() {
-    d3.json("samples.json").then((data) => {
-        console.log(data)
-
-    dropdown = d3.select("#selDataset");
-
-    data.names.forEach((name) => {
-        dropdown.append("option").text(name).property("value");
-    });
-        
-    displayMetadata(data.metadata);
-    displaySamples(data.names);
-
-    });
+function dataChange(newData) {
+    buildPlots(newData);
+    buildMetadata(newData);
 }
 
 init();
-
-// });
-
-    
-
-
-
 
 
         
