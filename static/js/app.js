@@ -1,5 +1,7 @@
 // get metadata for demographic info box
-function buildMetadata(sample) {
+// function buildMetadata(sample) {
+
+
 d3.json("samples.json").then((data) => {
     console.log(data);
 
@@ -8,7 +10,7 @@ d3.json("samples.json").then((data) => {
         data.forEach((metadata) => {
             console.log(metadata);
 
-            let demoInfo = d3.select("#sample-metadata");
+            const demoInfo = d3.select("#sample-metadata");
             demoInfo.html("");
 
             Object.entries(metadata).forEach(([key, value]) => {
@@ -19,33 +21,24 @@ d3.json("samples.json").then((data) => {
     displayMetadata(data.metadata);
 
 });
-}
 
 
 
 
 // get sample data (values, ids, labels for horizontal bar chart and bubble chart)
+
 d3.json("samples.json").then((data) => {
     console.log(data);
 
     function displaySamples(data) {
         data.forEach((sample) => {
-            let dropdown = d3.select("#selDataset");
-            let cell = dropdown.append("option");
+            const dropdown = d3.select("#selDataset");
+            const cell = dropdown.append("option");
             cell.text(sample);
         });
     }
     
     displaySamples(data.names);
-});
-
-    // let washes = data.metadata[0].wfreq;
-    // console.log(washes);
-
-
-function buildPlots(sample) {
-d3.json("samples.json").then((data) => {
-    console.log(data);
 
 
     let sampleData = data.samples[0].sample_values.slice(0,10)
@@ -101,8 +94,8 @@ d3.json("samples.json").then((data) => {
     };
 
     Plotly.newPlot("bubble", bubbleChart, bubbleLayout);
-    });
-}
+
+});
 
     // // gauge plot
     // let gaugePlot = [{
@@ -135,34 +128,56 @@ d3.json("samples.json").then((data) => {
 // });
 
 
-function init() {
+// d3.json("samples.json").then((sampleNames) => {
+//     console.log(sampleNames);
 
-d3.json("samples.json").then((data) => {
-    console.log(data);
-    
-    function sample(data) {
-        data.forEach((sample) => {
-            let dropdown = d3.select("#selDataset");
-            let cell = dropdown.append("option");
-            cell.text(sample);
-        });
-    }
+//     function displayNames(names) {
+//         names.forEach((sample) => {
+//             let dropdown = d3.select("#selDataset");
+//             dropdown.append("option").text(sample).property("value", sample);
+//         });
 
-    let sampleDisplay = data[0];
-    buildPlots(sampleDisplay);
-    buildMetadata(sampleDisplay);
+//         let sampleDisplay = sampleNames[0];
+//         displayNames(sampleDisplay);
 
-});
-        
+//     }
+// });
+
+
+// d3.select("#selDataset").on("change", updateData);
+
+// function updateData(newData) {
+//     displayMetadata(newData);
+//     displaySamples(newData);
+
+// }
+
+// function init() {
+//     const dropdown = d3.select("#selDataset");
+
+//     d3.json("samples.json").then((data) => {
+//     console.log(data);
+
+//         function displayNames(data) {
+//             data.forEach((sample) => {
+//             dropdown.append("option").text(sample).property("value", sample);
+//             });
+
+//             const firstSample = data[0];
+//             console.log(firstSample);
+//             displayMetadata(firstSample);
+//             displaySamples(firstSample);
+
+//         }
+//     });
+
+// }
+
+function updateData(newData) {
+    displayMetadata(newData);
+    displaySamples(newData);
 }
 
-
-function dataChange(newData) {
-    buildPlots(newData);
-    buildMetadata(newData);
-}
-
-init();
 
 
         
