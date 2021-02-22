@@ -41,7 +41,8 @@ function buildPlots(sampleID) {
                 t: 100,
                 b: 100
             },
-            xaxis: {title: "Sample Values"}
+            xaxis: {title: "Sample Values"},
+            width: 1050
         };
     
         Plotly.newPlot("bar", barhChart, layout);
@@ -50,21 +51,22 @@ function buildPlots(sampleID) {
         const bubbleChart = [{
             x: sampleName[0].otu_ids,
             y: sampleName[0].sample_values,
+            text: sampleName[0].otu_labels,
             mode: "markers",
             marker: {
                 size: sampleName[0].sample_values,
                 color: sampleName[0].otu_ids
             },
-            text: sampleName[0].otu_labels
         }];
     
         const bubbleLayout = {
             xaxis: {title: "OTU ID"},
-            yaxis: {title: "Sample Values"}
+            yaxis: {title: "Sample Values"},
+            height: 500,
+            width: 1200
         };
     
         Plotly.newPlot("bubble", bubbleChart, bubbleLayout);
-
 
     });
 
