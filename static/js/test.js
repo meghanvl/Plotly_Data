@@ -1,26 +1,25 @@
 // get sample data (values, ids, labels for horizontal bar chart and bubble chart)
-
 function buildPlots(sampleID) {
     d3.json("samples.json").then((data) => {
         console.log(data);
 
+        // filter data by test subject ID and display filtered data
         const sampleName = data.samples.filter(row => row.id === sampleID);
-        console.log(sampleName + "ID");
+        console.log(sampleName);
 
-        const otu = data.samples[0].otu_ids
+        const otu = sampleName[0].otu_ids
         console.log(otu);
 
-
-        const sampleData = data.samples[0].sample_values.slice(0,10)
+        const sampleData = sampleName[0].sample_values.slice(0,10)
         const sample_values = sampleData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
         console.log(sample_values);
 
-        const otuData = data.samples[0].otu_ids.slice(0,10);
+        const otuData = sampleName[0].otu_ids.slice(0,10);
         const otuSort = otuData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
         const otu_ids = otuSort.map(data => "OTU" + " " + data);
         console.log(otu_ids);
     
-        const otu_labels = data.samples[0].otu_labels.slice(0,10);
+        const otu_labels = sampleName[0].otu_labels.slice(0,10);
         console.log(otu_labels);
 
         const barhChart = [{
@@ -75,7 +74,6 @@ function getMetadata(sampleID) {
     d3.json("samples.json").then((data) => {
         console.log(sampleID);
 
-
         const results = data.metadata.filter(row => row.id == sampleID);
         console.log(results);
 
@@ -88,9 +86,16 @@ function getMetadata(sampleID) {
     });
 }
 
+function updateData(newData) {
+    
+    buildPlots(newData);
+    getMetadata(newData);
+}
+
 // initialize default data
 function init() {
 
+    
     const dropdownMenu = d3.select("#selDataset");
 
     d3.json("samples.json").then((sampleData) => {
@@ -105,12 +110,6 @@ function init() {
         getMetadata(sampleData.names[0]);
 
     });
-}
-
-function updateData(newData) {
-    console.log(newData + "test");
-    buildPlots(newData);
-    getMetadata(newData);
 }
 
 init();
