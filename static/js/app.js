@@ -82,6 +82,7 @@ function getMetadata(sampleID) {
         const results = data.metadata.filter(row => row.id == sampleID);
         console.log(results);
 
+        // grab the html id for the dropdown menu
         const demoInfo = d3.select("#sample-metadata");
         demoInfo.html("");
 
