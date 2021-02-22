@@ -1,30 +1,3 @@
-// get metadata for demographic info box
-// function buildMetadata(sample) {
-
-
-d3.json("samples.json").then((data) => {
-    console.log(data);
-
-    function displayMetadata(data) {
-
-        data.forEach((metadata) => {
-            console.log(metadata);
-
-            const demoInfo = d3.select("#sample-metadata");
-            demoInfo.html("");
-
-            Object.entries(metadata).forEach(([key, value]) => {
-                demoInfo.append("p").text(`${key}: ${value}`);
-            });
-        });
-    }
-    displayMetadata(data.metadata);
-
-});
-
-
-
-
 // get sample data (values, ids, labels for horizontal bar chart and bubble chart)
 
 d3.json("samples.json").then((data) => {
@@ -41,21 +14,21 @@ d3.json("samples.json").then((data) => {
     displaySamples(data.names);
 
 
-    let sampleData = data.samples[0].sample_values.slice(0,10)
-    let sample_values = sampleData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
+    const sampleData = data.samples[0].sample_values.slice(0,10)
+    const sample_values = sampleData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
     console.log(sample_values);
 
-    let otuData = data.samples[0].otu_ids.slice(0,10);
-    let otuSort = otuData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
-    let otu_ids = otuSort.map(data => "OTU" + " " + data);
+    const otuData = data.samples[0].otu_ids.slice(0,10);
+    const otuSort = otuData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
+    const otu_ids = otuSort.map(data => "OTU" + " " + data);
     console.log(otu_ids);
 
     
-    let otu_labels = data.samples[0].otu_labels.slice(0,10);
+    const otu_labels = data.samples[0].otu_labels.slice(0,10);
     console.log(otu_labels);
 
     // horizontal bar chart
-    let barhChart = [{
+    const barhChart = [{
         x: sample_values,
         y: otu_ids,
         text: otu_labels,
@@ -63,7 +36,7 @@ d3.json("samples.json").then((data) => {
         orientation: "h"
     }];
 
-    let layout = {
+    const layout = {
         title: "Top 10 OTUs per Test Subject",
         margin: {
             l: 100,
@@ -77,18 +50,19 @@ d3.json("samples.json").then((data) => {
     Plotly.newPlot("bar", barhChart, layout);
 
     // bubble chart
-    let bubbleChart = [{
-        x: otuSort,
-        y: sample_values,
-        text: otu_labels,
+    const bubbleChart = [{
+        x: data.samples[0].otu_ids,
+        y: data.samples[0].sample_values,
+        // text: otu_labels,
         mode: "markers",
         marker: {
-            size: sample_values,
-            color: otuSort
-        }
+            size: data.samples[0].sample_values,
+            color: data.samples[0].otu_ids
+        },
+        text: data.samples[0].otu_labels
     }];
 
-    let bubbleLayout = {
+    const bubbleLayout = {
         xaxis: {title: "OTU ID"},
         yaxis: {title: "Sample Values"}
     };
@@ -97,8 +71,30 @@ d3.json("samples.json").then((data) => {
 
 });
 
+
+// get metadata for demographic info box
+d3.json("samples.json").then((data) => {
+    console.log(data);
+
+    function displayMetadata(data) {
+
+        data.forEach((metadata) => {
+            console.log(metadata);
+
+            const demoInfo = d3.select("#sample-metadata");
+            demoInfo.html("");
+
+            Object.entries(metadata).forEach(([key, value]) => {
+                demoInfo.append("h5").text(`${key}: ${value}`);
+            });
+        });
+    }
+    displayMetadata(data.metadata);
+
+});
+
     // // gauge plot
-    // let gaugePlot = [{
+    // const gaugePlot = [{
     //     domain: {x: washes},
     //     title: {text: "Belly Button Washing Frequency"},
     //     type: "indicator",
@@ -152,31 +148,33 @@ d3.json("samples.json").then((data) => {
 
 // }
 
-// function init() {
-//     const dropdown = d3.select("#selDataset");
+function init() {
+    const dropdown = d3.select("#selDataset");
 
-//     d3.json("samples.json").then((data) => {
-//     console.log(data);
+    d3.json("samples.json").then((data) => {
+    console.log(data);
 
-//         function displayNames(data) {
-//             data.forEach((sample) => {
-//             dropdown.append("option").text(sample).property("value", sample);
-//             });
+        function displayNames(data) {
+            data.forEach((sample) => {
+            dropdown.append("option").text(sample).property("value", sample);
+            });
 
-//             const firstSample = data[0];
-//             console.log(firstSample);
-//             displayMetadata(firstSample);
-//             displaySamples(firstSample);
+            const firstSample = data[0];
+        
+            displayMetadata(firstSample);
+            displaySamples(firstSample);
 
-//         }
-//     });
+        }
+    });
 
-// }
+}
 
 function updateData(newData) {
     displayMetadata(newData);
     displaySamples(newData);
 }
+
+init();
 
 
 
