@@ -10,6 +10,7 @@ function buildPlots(sampleID) {
         const otu = sampleName[0].otu_ids
         console.log(otu);
 
+        // get first 10 samples and reverse order
         const sampleData = sampleName[0].sample_values.slice(0,10)
         const sample_values = sampleData.sort((firstNum, secondNum) => secondNum - firstNum).reverse();
         console.log(sample_values);
@@ -86,6 +87,7 @@ function getMetadata(sampleID) {
         const demoInfo = d3.select("#sample-metadata");
         demoInfo.html("");
 
+        // iterate through results to get key and value pairs
         Object.entries(results[0]).forEach(([key, value]) => {
             demoInfo.append("h5").text(`${key}: ${value}`);
         });
