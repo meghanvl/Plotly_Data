@@ -78,6 +78,7 @@ function getMetadata(sampleID) {
     d3.json("samples.json").then((data) => {
         console.log(sampleID);
 
+        // get demographic data based on ID
         const results = data.metadata.filter(row => row.id == sampleID);
         console.log(results);
 
